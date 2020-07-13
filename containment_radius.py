@@ -39,10 +39,11 @@ df['k_means'] = kmeans_best.predict(df)
 df['dist'] = np.linalg.norm(df.iloc[:,:-1].to_numpy()-cluster_center[df['k_means']], axis=1)
 
 # find 50% containment radius of each cluster
+percentage = 0.5
 radius_list = []
 fig, axes = plt.subplots(figsize=(16,8))
 for i in range(k_best):
-    radius_list.append(df.loc[df['k_means']==i]['dist'].median()) # use median to get 50%
+    radius_list.append(df.loc[df['k_means']==i]['dist'].quantile(percentage)) # use qunatile to get customized portion
     draw_circle = plt.Circle((cluster_center[i,0], cluster_center[i,1]), radius_list[i], fill=False)
     axes.set_aspect(1)
     axes.add_artist(draw_circle)
